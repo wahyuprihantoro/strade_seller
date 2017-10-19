@@ -1,12 +1,15 @@
 package id.strade.android.seller
 
 import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
+import android.util.Log
+import org.androidannotations.annotations.AfterViews
+import org.androidannotations.annotations.EActivity
 
-class MainActivity : AppCompatActivity() {
+@EActivity(R.layout.activity_main)
+open class MainActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    @AfterViews
+    fun init() {
+        Log.d("wahyu", "masuk activity")
     }
 }
