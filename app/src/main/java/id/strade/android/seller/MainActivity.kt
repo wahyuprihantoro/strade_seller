@@ -11,6 +11,6 @@ open class MainActivity : AppCompatActivity() {
     @AfterViews
     fun init() {
         Log.d("wahyu", "masuk activity")
-        LoginActivity_.intent(this).start()
+        IntroActivity_.intent(this).start()
     }
 }
