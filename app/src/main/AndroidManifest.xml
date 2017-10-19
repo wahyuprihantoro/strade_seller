@@ -24,6 +24,11 @@
         <activity
             android:name=".RegisterActivity_"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".IntroActivity_"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_intro"
+            android:theme="@style/FullscreenTheme" />
     </application>
 
 </manifest>

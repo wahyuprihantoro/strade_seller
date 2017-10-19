@@ -5,7 +5,7 @@ import org.androidannotations.annotations.AfterViews
 import org.androidannotations.annotations.EActivity
 
 @EActivity(R.layout.activity_register)
-class RegisterActivity : AppCompatActivity() {
+open class RegisterActivity : AppCompatActivity() {
 
     @AfterViews
     fun init() {
