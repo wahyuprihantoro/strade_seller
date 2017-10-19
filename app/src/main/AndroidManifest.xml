@@ -3,6 +3,7 @@
     package="id.strade.android.seller">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,6 +20,9 @@
         </activity>
         <activity
             android:name=".LoginActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RegisterActivity_"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
