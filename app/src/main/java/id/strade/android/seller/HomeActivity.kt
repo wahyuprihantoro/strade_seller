@@ -29,7 +29,7 @@ open class HomeActivity : AppCompatActivity() {
     }
 
 
-    fun setUpBottomBar() {
+    private fun setUpBottomBar() {
         bottomBar.setOnTabSelectListener { tabId ->
             when (tabId) {
                 R.id.tab_home -> viewPager.currentItem = 0
@@ -40,20 +40,18 @@ open class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private inner class ViewPagerAdapter (fm: FragmentManager) : FragmentPagerAdapter(fm) {
+    private inner class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment {
-            when (position) {
-                0 -> return HomeFragment_.builder().build()
-                1 -> return MapFragment_.builder().build()
-                2 -> return RequestFragment_.builder().build()
-                else -> return AccountFragment_.builder().build()
+            return when (position) {
+                0 -> HomeFragment_.builder().build()
+                1 -> MapFragment_.builder().build()
+                2 -> RequestFragment_.builder().build()
+                else -> AccountFragment_.builder().build()
             }
         }
 
-        override fun getCount(): Int {
-            return 4
-        }
+        override fun getCount() = 4
     }
 
 }
