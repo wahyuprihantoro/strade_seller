@@ -1,0 +1,18 @@
+<tabs>
+    <tab
+        icon="@drawable/ic_home_bottom_bar"
+        id="@+id/tab_home"
+        title="Home" />
+    <tab
+        icon="@drawable/ic_map_bottom_bar"
+        id="@+id/tab_map"
+        title="Maps" />
+    <tab
+        icon="@drawable/ic_invoice"
+        id="@+id/tab_request"
+        title="Pesanan" />
+    <tab
+        icon="@drawable/ic_person_bottom_bar"
+        id="@+id/tab_account"
+        title="Akun" />
+</tabs>
