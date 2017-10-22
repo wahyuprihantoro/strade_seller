@@ -3,7 +3,6 @@ package id.strade.android.seller
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import id.strade.android.seller.storage.Prefs
-import id.strade.android.seller.storage.Prefs_
 import org.androidannotations.annotations.AfterViews
 import org.androidannotations.annotations.Bean
 import org.androidannotations.annotations.EActivity
@@ -25,6 +24,7 @@ open class SplashActivity : AppCompatActivity() {
             } else {
                 HomeActivity_.intent(applicationContext).flags(Intent.FLAG_ACTIVITY_NEW_TASK).start()
             }
+            finish()
         }, 1500)
     }
 }
