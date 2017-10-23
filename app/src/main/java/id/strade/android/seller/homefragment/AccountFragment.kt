@@ -4,12 +4,10 @@ import android.support.v4.app.Fragment
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import id.strade.android.seller.IntroActivity_
 import id.strade.android.seller.R
 import id.strade.android.seller.storage.Prefs
-import org.androidannotations.annotations.AfterViews
-import org.androidannotations.annotations.Bean
-import org.androidannotations.annotations.EFragment
-import org.androidannotations.annotations.ViewById
+import org.androidannotations.annotations.*
 
 
 @EFragment(R.layout.fragment_account)
@@ -34,6 +32,14 @@ open class AccountFragment : Fragment() {
                 .load(user.store?.imageUrl)
                 .into(coverImageView)
         nameView.text = user.fullName
+    }
+
+
+    @Click
+    fun logout() {
+        IntroActivity_.intent(activity).start()
+        activity.finish()
+        prefs.logout()
     }
 
 }
