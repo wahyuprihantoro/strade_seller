@@ -17,8 +17,8 @@ open class MapFragment : Fragment(), OnMapReadyCallback {
 
     @AfterViews
     fun init() {
-        val mapFragment = fragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
-        mapFragment?.getMapAsync(this)
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

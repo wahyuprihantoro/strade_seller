@@ -8,17 +8,11 @@ import id.strade.android.seller.model.User
 /**
  * Created by wahyu on 22 October 2017.
  */
-class UserResponse {
-    @SerializedName("status")
-    @Expose
-    var status: Boolean? = null
-    @SerializedName("message")
-    @Expose
-    var message: String? = null
+class UserResponse : BaseResponse() {
     @SerializedName("user")
     @Expose
-    var user: User? = null
+    lateinit var user: User
     @SerializedName("token")
     @Expose
-    var token: String? = null
+    lateinit var token: String
 }

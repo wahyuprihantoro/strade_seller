@@ -74,7 +74,7 @@ open class LoginActivity : AppCompatActivity() {
         if (userResponse.status!!) {
             prefs.token = userResponse.token
             prefs.user = userResponse.user
-            Toast.makeText(applicationContext, "Berhasil login", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "Selamat datang, ${userResponse.user.fullName}!", Toast.LENGTH_SHORT).show()
             HomeActivity_.intent(applicationContext).flags(Intent.FLAG_ACTIVITY_NEW_TASK).start()
             finish()
         }
