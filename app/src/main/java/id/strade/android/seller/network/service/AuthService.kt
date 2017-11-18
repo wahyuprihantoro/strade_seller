@@ -1,7 +1,7 @@
 package id.strade.android.seller.network.service
 
 import id.strade.android.seller.network.response.UserResponse
-import retrofit2.Call
+import io.reactivex.Observable
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
@@ -14,7 +14,7 @@ interface AuthService {
     @POST("login")
     fun login(@Field("username") username: String,
               @Field("password") password: String,
-              @Field("role") role: String): Call<UserResponse>
+              @Field("role") role: String): Observable<UserResponse>
 
     @FormUrlEncoded
     @POST("register")
@@ -22,5 +22,5 @@ interface AuthService {
                  @Field("name") name: String,
                  @Field("phone_number") phoneNumber: String,
                  @Field("password") password: String,
-                 @Field("role") role: String): Call<UserResponse>
+                 @Field("role") role: String): Observable<UserResponse>
 }

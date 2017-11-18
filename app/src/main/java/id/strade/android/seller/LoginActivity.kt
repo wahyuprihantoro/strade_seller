@@ -11,10 +11,10 @@ import id.strade.android.seller.network.ApiClient
 import id.strade.android.seller.network.response.UserResponse
 import id.strade.android.seller.network.service.AuthService
 import id.strade.android.seller.storage.Prefs
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.androidannotations.annotations.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import retrofit2.HttpException
 
 
 @EActivity(R.layout.activity_login)
@@ -49,30 +49,35 @@ open class LoginActivity : AppCompatActivity() {
         showDialog()
         var username = usernameEditText.text.toString()
         var password = passwordEditText.text.toString()
-        apiClient.getService(AuthService::class.java).login(username, password, "seller").enqueue(object : Callback<UserResponse> {
-            override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
-                if (response.isSuccessful) {
-                    var resp = response.body()
-                    if (resp != null && resp.status!!) {
-                        Log.d("wahyu", Gson().toJson(resp))
-                        prefs.token = resp.token
-                        prefs.user = resp.user
-                        Toast.makeText(applicationContext, "Berhasil login", Toast.LENGTH_SHORT).show()
-                        HomeActivity_.intent(applicationContext).flags(Intent.FLAG_ACTIVITY_NEW_TASK).start()
-                        finish()
-                    } else {
-                        Toast.makeText(applicationContext, resp?.message, Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    Toast.makeText(applicationContext, "gagal login, ada kesalahan pada server", Toast.LENGTH_SHORT).show()
-                }
-                dialog.dismiss()
-            }
+        val loginObs = apiClient.getService(AuthService::class.java).login(username, password, "seller")
+        loginObs.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ userResponse: UserResponse ->
+                    onLoginSuccess(userResponse)
+                }, { e: Throwable ->
+                    onLoginFailed(e)
+                })
+    }
 
-            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                Toast.makeText(applicationContext, t.message, Toast.LENGTH_SHORT).show()
-                dialog.dismiss()
-            }
-        })
+    private fun onLoginFailed(e: Throwable) {
+        if (e is HttpException) {
+            val resp = e.response().errorBody()?.charStream()?.readText()
+            var userResponse = Gson().fromJson(resp, UserResponse::class.java)
+            Toast.makeText(applicationContext, userResponse.message, Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show()
+        }
+        dialog.dismiss()
+    }
+
+    private fun onLoginSuccess(userResponse: UserResponse) {
+        if (userResponse.status!!) {
+            prefs.token = userResponse.token
+            prefs.user = userResponse.user
+            Toast.makeText(applicationContext, "Berhasil login", Toast.LENGTH_SHORT).show()
+            HomeActivity_.intent(applicationContext).flags(Intent.FLAG_ACTIVITY_NEW_TASK).start()
+            finish()
+        }
+        Log.d("wahyu", Gson().toJson(userResponse))
     }
 }

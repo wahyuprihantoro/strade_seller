@@ -55,32 +55,32 @@ open class RegisterActivity : AppCompatActivity() {
         var password = passwordEditText.text.toString()
         var phoneNumber = phoneNumberEditText.text.toString()
         var name = nameEditText.text.toString()
-        apiClient.getService(AuthService::class.java).register(username = username, password = password,
-                role = "seller", phoneNumber = phoneNumber, name = name)
-                .enqueue(object : Callback<UserResponse> {
-                    override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
-                        if (response.isSuccessful) {
-                            var resp = response.body()
-                            if (resp != null && resp.status!!) {
-                                Log.d("wahyu", Gson().toJson(resp))
-                                prefs.token = resp.token
-                                prefs.user = resp.user
-                                Toast.makeText(applicationContext, "Welcome, ${resp.user?.fullName} :)", Toast.LENGTH_SHORT).show()
-                                HomeActivity_.intent(applicationContext).flags(Intent.FLAG_ACTIVITY_NEW_TASK).start()
-                                finish()
-                            } else {
-                                Toast.makeText(applicationContext, resp?.message, Toast.LENGTH_SHORT).show()
-                            }
-                        } else {
-                            Toast.makeText(applicationContext, "gagal register, ada kesalahan pada server", Toast.LENGTH_SHORT).show()
-                        }
-                        dialog.dismiss()
-                    }
-
-                    override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                        Toast.makeText(applicationContext, t.message, Toast.LENGTH_SHORT).show()
-                        dialog.dismiss()
-                    }
-                })
+//        apiClient.getService(AuthService::class.java).register(username = username, password = password,
+//                role = "seller", phoneNumber = phoneNumber, name = name)
+//                .enqueue(object : Callback<UserResponse> {
+//                    override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+//                        if (response.isSuccessful) {
+//                            var resp = response.body()
+//                            if (resp != null && resp.status!!) {
+//                                Log.d("wahyu", Gson().toJson(resp))
+//                                prefs.token = resp.token
+//                                prefs.user = resp.user
+//                                Toast.makeText(applicationContext, "Welcome, ${resp.user?.fullName} :)", Toast.LENGTH_SHORT).show()
+//                                HomeActivity_.intent(applicationContext).flags(Intent.FLAG_ACTIVITY_NEW_TASK).start()
+//                                finish()
+//                            } else {
+//                                Toast.makeText(applicationContext, resp?.message, Toast.LENGTH_SHORT).show()
+//                            }
+//                        } else {
+//                            Toast.makeText(applicationContext, "gagal register, ada kesalahan pada server", Toast.LENGTH_SHORT).show()
+//                        }
+//                        dialog.dismiss()
+//                    }
+//
+//                    override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+//                        Toast.makeText(applicationContext, t.message, Toast.LENGTH_SHORT).show()
+//                        dialog.dismiss()
+//                    }
+//                })
     }
 }
