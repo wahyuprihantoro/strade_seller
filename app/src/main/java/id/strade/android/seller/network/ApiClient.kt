@@ -28,6 +28,7 @@ open class ApiClient {
     fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .client(provideOkHttpClient())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()

@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.Toast
 import com.google.gson.Gson
 import id.strade.android.seller.network.ApiClient
+import id.strade.android.seller.network.response.BaseResponse
 import id.strade.android.seller.network.response.UserResponse
 import id.strade.android.seller.network.service.AuthService
 import id.strade.android.seller.storage.Prefs
@@ -47,8 +48,8 @@ open class LoginActivity : AppCompatActivity() {
     @Click(R.id.btn_login_api)
     fun login() {
         showDialog()
-        var username = usernameEditText.text.toString()
-        var password = passwordEditText.text.toString()
+        val username = usernameEditText.text.toString()
+        val password = passwordEditText.text.toString()
         val loginObs = apiClient.getService(AuthService::class.java).login(username, password, "seller")
         loginObs.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -61,9 +62,9 @@ open class LoginActivity : AppCompatActivity() {
 
     private fun onLoginFailed(e: Throwable) {
         if (e is HttpException) {
-            val resp = e.response().errorBody()?.charStream()?.readText()
-            var userResponse = Gson().fromJson(resp, UserResponse::class.java)
-            Toast.makeText(applicationContext, userResponse.message, Toast.LENGTH_SHORT).show()
+            val rawResponse = e.response().errorBody()?.charStream()?.readText()
+            val resp = Gson().fromJson(rawResponse, BaseResponse::class.java)
+            Toast.makeText(applicationContext, resp.message, Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show()
         }
@@ -71,7 +72,7 @@ open class LoginActivity : AppCompatActivity() {
     }
 
     private fun onLoginSuccess(userResponse: UserResponse) {
-        if (userResponse.status!!) {
+        if (userResponse.status) {
             prefs.token = userResponse.token
             prefs.user = userResponse.user
             Toast.makeText(applicationContext, "Selamat datang, ${userResponse.user.fullName}!", Toast.LENGTH_SHORT).show()

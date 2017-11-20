@@ -79,7 +79,7 @@ open class RegisterActivity : AppCompatActivity() {
     }
 
     private fun onRegisterSuccess(userResponse: UserResponse) {
-        if (userResponse.status!!) {
+        if (userResponse.status) {
             prefs.token = userResponse.token
             prefs.user = userResponse.user
             Toast.makeText(applicationContext, "Selamat datang, ${userResponse.user.fullName}!", Toast.LENGTH_SHORT).show()
