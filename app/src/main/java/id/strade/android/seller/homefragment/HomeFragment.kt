@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.Toast
 import com.google.gson.Gson
+import id.strade.android.seller.CreateProductActivity_
 import id.strade.android.seller.R
 import id.strade.android.seller.adapter.ProductAdapter
 import id.strade.android.seller.network.ApiClient
@@ -13,10 +14,7 @@ import id.strade.android.seller.network.response.GetProductResponse
 import id.strade.android.seller.network.service.ProductService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import org.androidannotations.annotations.AfterViews
-import org.androidannotations.annotations.Bean
-import org.androidannotations.annotations.EFragment
-import org.androidannotations.annotations.ViewById
+import org.androidannotations.annotations.*
 import retrofit2.HttpException
 
 @EFragment(R.layout.fragment_home)
@@ -51,4 +49,8 @@ open class HomeFragment : Fragment() {
                 })
     }
 
+    @Click
+    fun fab() {
+        CreateProductActivity_.intent(context).start()
+    }
 }
