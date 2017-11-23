@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import com.google.gson.Gson
+import id.strade.android.seller.homefragment.HomeFragment
 import id.strade.android.seller.network.ApiClient
 import id.strade.android.seller.network.response.BaseResponse
 import id.strade.android.seller.network.service.ProductService
@@ -26,8 +27,10 @@ import java.io.ByteArrayOutputStream
 
 @EActivity(R.layout.activity_create_product)
 open class CreateProductActivity : AppCompatActivity() {
-    private val REQUEST_CODE_PICKER = 8723
-    private val RC_CAMERA = 3000
+    companion object {
+        private val RC_CAMERA = 3000
+        private val REQUEST_IMAGE_CAPTURE = 123
+    }
 
     @ViewById
     lateinit var nameEditText: EditText
@@ -87,7 +90,7 @@ open class CreateProductActivity : AppCompatActivity() {
     private fun onCreateProductSuccess(baseResponse: BaseResponse) {
         if (baseResponse.status) {
             Toast.makeText(applicationContext, "Berhasil membuat product!", Toast.LENGTH_SHORT).show()
-            setResult(200)
+            setResult(HomeFragment.SUCCESS_RESULT_CODE)
             finish()
         }
         Log.d("wahyu", Gson().toJson(baseResponse))
@@ -103,8 +106,6 @@ open class CreateProductActivity : AppCompatActivity() {
             captureImage()
         }
     }
-
-    private val REQUEST_IMAGE_CAPTURE = 123
 
     private fun captureImage() {
         val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -135,9 +136,6 @@ open class CreateProductActivity : AppCompatActivity() {
             val b = baos.toByteArray()
             encodedImage = Base64.encodeToString(b, Base64.NO_WRAP)
             Log.d("wahyu", encodedImage)
-
         }
-
     }
-
 }

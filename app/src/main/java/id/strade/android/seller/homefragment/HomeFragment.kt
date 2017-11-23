@@ -12,7 +12,6 @@ import id.strade.android.seller.adapter.ProductAdapter
 import id.strade.android.seller.network.ApiClient
 import id.strade.android.seller.network.response.BaseResponse
 import id.strade.android.seller.network.response.GetProductResponse
-import id.strade.android.seller.network.service.ProductService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.androidannotations.annotations.*
@@ -28,11 +27,16 @@ open class HomeFragment : Fragment() {
     @Bean
     lateinit var apiClient: ApiClient
 
+    companion object {
+        val CREATE_TASK_REQUEST_CODE = 800
+        val SUCCESS_RESULT_CODE = 200
+    }
+
     @AfterViews
     fun init() {
         rv.layoutManager = LinearLayoutManager(context)
-        val producsResponseObs = apiClient.getService(ProductService::class.java).getProducts()
-        producsResponseObs.subscribeOn(Schedulers.io())
+        val productsResponseObs = apiClient.getProductService().getProducts()
+        productsResponseObs.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ resp: GetProductResponse ->
                     if (resp.status) {
@@ -55,10 +59,6 @@ open class HomeFragment : Fragment() {
     fun fab() {
         startActivityForResult(CreateProductActivity_.intent(context).get(), CREATE_TASK_REQUEST_CODE)
     }
-
-    private val CREATE_TASK_REQUEST_CODE = 800
-
-    val SUCCESS_RESULT_CODE = 200
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

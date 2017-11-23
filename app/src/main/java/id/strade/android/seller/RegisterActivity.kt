@@ -56,7 +56,7 @@ open class RegisterActivity : AppCompatActivity() {
         val password = passwordEditText.text.toString()
         val phoneNumber = phoneNumberEditText.text.toString()
         val name = nameEditText.text.toString()
-        val registerObs = apiClient.getService(AuthService::class.java).register(username = username, password = password,
+        val registerObs = apiClient.getAuthService().register(username = username, password = password,
                 role = "seller", phoneNumber = phoneNumber, name = name)
         registerObs.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

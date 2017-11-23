@@ -1,5 +1,7 @@
 package id.strade.android.seller.network
 
+import id.strade.android.seller.network.service.AuthService
+import id.strade.android.seller.network.service.ProductService
 import id.strade.android.seller.storage.Prefs
 import okhttp3.OkHttpClient
 import org.androidannotations.annotations.Bean
@@ -21,11 +23,9 @@ open class ApiClient {
     @Bean
     lateinit var prefs: Prefs
 
-    fun <T> getService(service: Class<T>): T {
-        return getRetrofit().create(service)
-    }
+    fun <T> getService(service: Class<T>): T = getRetrofit().create(service)
 
-    fun getRetrofit(): Retrofit {
+    private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(provideOkHttpClient())
@@ -34,7 +34,7 @@ open class ApiClient {
                 .build()
     }
 
-    fun provideOkHttpClient(): OkHttpClient {
+    private fun provideOkHttpClient(): OkHttpClient {
         val httpClient = OkHttpClient.Builder()
         httpClient.addInterceptor { chain ->
             val original = chain.request()
@@ -47,5 +47,9 @@ open class ApiClient {
         }
         return httpClient.build()
     }
+
+    fun getAuthService(): AuthService = getService(AuthService::class.java)
+
+    fun getProductService(): ProductService = getService(ProductService::class.java)
 
 }

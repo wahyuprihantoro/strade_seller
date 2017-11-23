@@ -50,7 +50,7 @@ open class LoginActivity : AppCompatActivity() {
         showDialog()
         val username = usernameEditText.text.toString()
         val password = passwordEditText.text.toString()
-        val loginObs = apiClient.getService(AuthService::class.java).login(username, password, "seller")
+        val loginObs = apiClient.getAuthService().login(username, password, "seller")
         loginObs.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ userResponse: UserResponse ->
