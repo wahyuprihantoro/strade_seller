@@ -29,8 +29,8 @@ import id.strade.android.seller.storage.Prefs;
 public class LocationService extends Service implements LocationListener {
     public static final int COARSE_LOCATION_REQUEST_CODE = 123;
     public static final int FINE_LOCATION_REQUEST_CODE = 124;
-    private static final int MIN_TIME = 1000 * 60 * 2; // in ms
-    private static final int MIN_DISTANCE = 1000; // in meter
+    private static final int MIN_TIME = 1000 * 1; // in ms
+    private static final int MIN_DISTANCE = 10; // in meter
     @RootContext
     Context context;
     @Bean
@@ -42,7 +42,11 @@ public class LocationService extends Service implements LocationListener {
     private Location location;
     private boolean gpsEnabled;
     private boolean networkEnabled;
+    private LocationChangeListener listener;
 
+    public void setListener(LocationChangeListener listener) {
+        this.listener = listener;
+    }
 
     public void init(Activity activity) {
         this.activity = activity;
@@ -83,7 +87,7 @@ public class LocationService extends Service implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         Log.d("wahyu loc", location.toString());
-
+        listener.onLocationChange(location);
     }
 
     @Override
@@ -105,5 +109,9 @@ public class LocationService extends Service implements LocationListener {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    public interface LocationChangeListener{
+        void onLocationChange(Location location);
     }
 }

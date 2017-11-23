@@ -2,15 +2,12 @@ package id.strade.android.seller
 
 import android.Manifest
 import android.app.ProgressDialog
-import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.net.Uri
 import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
-import android.system.ErrnoException
 import android.util.Base64
 import android.util.Log
 import android.widget.EditText
@@ -25,8 +22,6 @@ import io.reactivex.schedulers.Schedulers
 import org.androidannotations.annotations.*
 import retrofit2.HttpException
 import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileNotFoundException
 
 
 @EActivity(R.layout.activity_create_product)
@@ -35,17 +30,18 @@ open class CreateProductActivity : AppCompatActivity() {
     private val RC_CAMERA = 3000
 
     @ViewById
-    lateinit var name: EditText
+    lateinit var nameEditText: EditText
     @ViewById
-    lateinit var price: EditText
+    lateinit var priceEditText: EditText
     @ViewById
-    lateinit var image: ImageView
-    private lateinit var encImage: String
-
+    lateinit var productImageView: ImageView
 
     @Bean
     lateinit var apiClient: ApiClient
-    lateinit var dialog: ProgressDialog
+
+    private lateinit var encodedImage: String
+    private lateinit var dialog: ProgressDialog
+
 
     @AfterViews
     fun init() {
@@ -63,21 +59,21 @@ open class CreateProductActivity : AppCompatActivity() {
     @Click
     fun create() {
         showDialog()
-        val n = name.text.toString()
-        val p = price.text.toString()
-        val img = encImage
+        val name = nameEditText.text.toString()
+        val price = priceEditText.text.toString()
 
-        val createProductObs = apiClient.getService(ProductService::class.java).createProducts(name = n, price = p, image = img)
+        val createProductObs = apiClient.getService(ProductService::class.java)
+                .createProducts(name = name, price = price, image = encodedImage)
         createProductObs.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ baseResponse: BaseResponse ->
-                    onLoginSuccess(baseResponse)
+                    onCreateProductSuccess(baseResponse)
                 }, { e: Throwable ->
-                    onLoginFailed(e)
+                    onCreateProductFailed(e)
                 })
     }
 
-    private fun onLoginFailed(e: Throwable) {
+    private fun onCreateProductFailed(e: Throwable) {
         if (e is HttpException) {
             val rawResponse = e.response().errorBody()?.charStream()?.readText()
             val resp = Gson().fromJson(rawResponse, BaseResponse::class.java)
@@ -88,11 +84,10 @@ open class CreateProductActivity : AppCompatActivity() {
         dialog.dismiss()
     }
 
-    private fun onLoginSuccess(baseResponse: BaseResponse) {
+    private fun onCreateProductSuccess(baseResponse: BaseResponse) {
         if (baseResponse.status) {
-            Toast.makeText(applicationContext, "Success gan!", Toast.LENGTH_SHORT).show()
-//            HomeActivity_.intent(applicationContext).flags(Intent.FLAG_ACTIVITY_NEW_TASK).start()
-            setResult(21)
+            Toast.makeText(applicationContext, "Berhasil membuat product!", Toast.LENGTH_SHORT).show()
+            setResult(200)
             finish()
         }
         Log.d("wahyu", Gson().toJson(baseResponse))
@@ -129,112 +124,20 @@ open class CreateProductActivity : AppCompatActivity() {
     }
 
 
-    private fun getPickImageResultUri(data: Intent): Uri? {
-        var isCamera = true
-        if (data.data != null) {
-            val action = data.action
-            isCamera = action != null && action == MediaStore.ACTION_IMAGE_CAPTURE
-        }
-        if (isCamera) {
-            return getCaptureImageOutputUri()
-        } else {
-
-        }
-        return data.data
-    }
-
-    private fun isUriRequiresPermissions(uri: Uri): Boolean {
-        try {
-            val resolver = contentResolver
-            val stream = resolver.openInputStream(uri)
-            stream.close()
-            return false
-        } catch (e: FileNotFoundException) {
-            if (e.cause is ErrnoException) {
-                return true
-            }
-        } catch (e: Exception) {
-        }
-        return false
-    }
-
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         Log.d("wahyu", "wahyu")
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val extras = data!!.extras
             val imageBitmap = extras.get("data") as Bitmap
-            image.setImageBitmap(imageBitmap)
+            productImageView.setImageBitmap(imageBitmap)
             val baos = ByteArrayOutputStream()
             imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos)
             val b = baos.toByteArray()
-            encImage = Base64.encodeToString(b, Base64.NO_WRAP)
-            Log.d("wahyu", encImage)
+            encodedImage = Base64.encodeToString(b, Base64.NO_WRAP)
+            Log.d("wahyu", encodedImage)
 
         }
 
     }
 
-
-    private fun getCaptureImageOutputUri(): Uri? {
-        var outputFileUri: Uri? = null
-        val getImage = externalCacheDir
-        if (getImage != null) {
-            outputFileUri = Uri.fromFile(File(getImage.path, "pickImageResult.jpeg"))
-        }
-        return outputFileUri
-    }
-
-    private fun getPickImageChooserIntent(): Intent {
-
-        val outputFileUri = getCaptureImageOutputUri()
-
-        val allIntents = ArrayList<Intent>()
-        val packageManager = packageManager
-
-        val captureIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE)
-        val listCam = packageManager.queryIntentActivities(captureIntent, 0)
-//        for (ResolveInfo res : listCam) {
-//            Intent intent = new Intent(captureIntent);
-//            intent.setComponent(new ComponentName (res.activityInfo.packageName, res.activityInfo.name));
-//            intent.setPackage(res.activityInfo.packageName);
-//            if (outputFileUri != null) {
-//                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-//            }
-//            allIntents.add(intent);
-//        }
-
-        for (res in listCam) {
-            val intent = Intent(captureIntent)
-            intent.component = ComponentName(res.activityInfo.packageName, res.activityInfo.name)
-            intent.`package` = res.activityInfo.packageName
-            if (outputFileUri != null) {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
-            }
-            allIntents.add(intent)
-        }
-        val galleryIntent = Intent(Intent.ACTION_GET_CONTENT)
-        galleryIntent.type = "image/*"
-        val listGallery = packageManager.queryIntentActivities(galleryIntent, 0);
-        for (res in listGallery) {
-            val intent = Intent(galleryIntent)
-            intent.component = ComponentName(res.activityInfo.packageName, res.activityInfo.name)
-            intent.`package` = res.activityInfo.packageName
-            allIntents.add(intent)
-        }
-
-        var mainIntent = allIntents[allIntents.size - 1]
-        for (intent in allIntents) {
-            if (intent.component.className == "com.android.documentsui.DocumentsActivity") {
-                mainIntent = intent
-                break
-            }
-        }
-        allIntents.remove(mainIntent)
-        val chooserIntent = Intent.createChooser(mainIntent, "Select source")
-
-//        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,  allIntents.toArray( Parcelable[allIntents.size()]))
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, allIntents)
-        return chooserIntent
-    }
 }

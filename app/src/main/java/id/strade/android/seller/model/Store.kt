@@ -14,7 +14,7 @@ class Store {
     @SerializedName("status")
     @Expose
     var status: Long? = null
-    @SerializedName("name")
+    @SerializedName("nameEditText")
     @Expose
     var name: String? = null
     @SerializedName("category")
