@@ -35,24 +35,32 @@ open class HomeFragment : Fragment() {
     @AfterViews
     fun init() {
         rv.layoutManager = LinearLayoutManager(context)
-        val productsResponseObs = apiClient.getProductService().getProducts()
-        productsResponseObs.subscribeOn(Schedulers.io())
+        apiClient.getProductService().getProducts()
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ resp: GetProductResponse ->
-                    if (resp.status) {
-                        val products = resp.products
-                        val adapter = ProductAdapter(context, products)
-                        rv.adapter = adapter
-                    }
+                    showProducts(resp)
                 }, { e: Throwable ->
-                    if (e is HttpException) {
-                        val rawResponse = e.response().errorBody()?.charStream()?.readText()
-                        val resp = Gson().fromJson(rawResponse, BaseResponse::class.java)
-                        Toast.makeText(context, resp.message, Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
-                    }
+                    showGetProductFailed(e)
                 })
+    }
+
+    private fun showGetProductFailed(e: Throwable) {
+        if (e is HttpException) {
+            val rawResponse = e.response().errorBody()?.charStream()?.readText()
+            val resp = Gson().fromJson(rawResponse, BaseResponse::class.java)
+            Toast.makeText(context, resp.message, Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun showProducts(resp: GetProductResponse) {
+        if (resp.status) {
+            val products = resp.products
+            val adapter = ProductAdapter(context, products)
+            rv.adapter = adapter
+        }
     }
 
     @Click

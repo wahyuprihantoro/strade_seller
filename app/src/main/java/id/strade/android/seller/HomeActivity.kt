@@ -9,7 +9,7 @@ import com.roughike.bottombar.BottomBar
 import id.strade.android.seller.homefragment.AccountFragment_
 import id.strade.android.seller.homefragment.HomeFragment_
 import id.strade.android.seller.homefragment.MapFragment_
-import id.strade.android.seller.homefragment.RequestFragment_
+import id.strade.android.seller.homefragment.OrderFragment_
 import org.androidannotations.annotations.AfterViews
 import org.androidannotations.annotations.EActivity
 import org.androidannotations.annotations.ViewById
@@ -46,7 +46,7 @@ open class HomeActivity : AppCompatActivity() {
             return when (position) {
                 0 -> HomeFragment_.builder().build()
                 1 -> MapFragment_.builder().build()
-                2 -> RequestFragment_.builder().build()
+                2 -> OrderFragment_.builder().build()
                 else -> AccountFragment_.builder().build()
             }
         }

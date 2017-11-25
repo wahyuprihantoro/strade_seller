@@ -49,6 +49,18 @@ open class CreateProductActivity : AppCompatActivity() {
     @AfterViews
     fun init() {
         dialog = ProgressDialog(this)
+        encodedImage = ""
+    }
+
+    @Click
+    fun takePicture() {
+        Log.d("wahyu", "take picture button is clicked")
+        val permissions = arrayOf(Manifest.permission.CAMERA)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, permissions, RC_CAMERA)
+        } else {
+            captureImage()
+        }
     }
 
     private fun showDialog() {
@@ -97,15 +109,6 @@ open class CreateProductActivity : AppCompatActivity() {
         dialog.dismiss()
     }
 
-    @Click
-    fun takePicture() {
-        val permissions = arrayOf(Manifest.permission.CAMERA)
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, permissions, RC_CAMERA)
-        } else {
-            captureImage()
-        }
-    }
 
     private fun captureImage() {
         val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)

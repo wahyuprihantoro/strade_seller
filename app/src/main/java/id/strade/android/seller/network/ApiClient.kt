@@ -1,6 +1,7 @@
 package id.strade.android.seller.network
 
 import id.strade.android.seller.network.service.AuthService
+import id.strade.android.seller.network.service.OrderService
 import id.strade.android.seller.network.service.ProductService
 import id.strade.android.seller.storage.Prefs
 import okhttp3.OkHttpClient
@@ -18,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 open class ApiClient {
 
     //    val BASE_URL = "http://159.89.200.247/api/"
-    private val BASE_URL = "http://10.0.3.2:8000/api/"
+    private val BASE_URL = "http://10.0.3.2:9000/api/"
 
     @Bean
     lateinit var prefs: Prefs
@@ -52,4 +53,5 @@ open class ApiClient {
 
     fun getProductService(): ProductService = getService(ProductService::class.java)
 
+    fun getOrderService(): OrderService = getService(OrderService::class.java)
 }

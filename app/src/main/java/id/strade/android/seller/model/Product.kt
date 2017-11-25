@@ -11,10 +11,10 @@ class Product {
     @SerializedName("id")
     @Expose
     var id: Int = 0
-    @SerializedName("nameEditText")
+    @SerializedName("name")
     @Expose
     lateinit var name: String
-    @SerializedName("priceEditText")
+    @SerializedName("price")
     @Expose
     var price: Int = 0
     @SerializedName("image_url")
