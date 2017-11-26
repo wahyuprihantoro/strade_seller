@@ -3,6 +3,7 @@ package id.strade.android.seller.homefragment
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.widget.Toast
 import com.google.gson.Gson
 import id.strade.android.seller.R
@@ -52,6 +53,7 @@ open class OrderFragment : Fragment() {
                 Toast.makeText(context, resp.message, Toast.LENGTH_SHORT).show()
             }
         } else {
+            Log.d("wahyu error", e.message)
             Toast.makeText(context, "Terjadi kesalahan pada koneksi.", Toast.LENGTH_SHORT).show()
         }
     }

@@ -13,7 +13,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import id.strade.android.seller.LocationService
+import id.strade.android.seller.service.LocationService
 import id.strade.android.seller.R
 import org.androidannotations.annotations.AfterViews
 import org.androidannotations.annotations.Bean

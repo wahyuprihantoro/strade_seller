@@ -19,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 open class ApiClient {
 
     //    val BASE_URL = "http://159.89.200.247/api/"
-    private val BASE_URL = "http://10.0.3.2:9000/api/"
+    private val BASE_URL = "http://10.0.3.2:8000/api/"
 
     @Bean
     lateinit var prefs: Prefs

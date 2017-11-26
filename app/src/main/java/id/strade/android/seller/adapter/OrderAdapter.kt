@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import id.strade.android.seller.OrderDetailActivity_
 import id.strade.android.seller.R
 import id.strade.android.seller.model.Order
 
@@ -37,6 +38,9 @@ class OrderAdapter(var context: Context, var orders: List<Order>) :
             name.text = order.buyer.fullName
             price.text = "Total harga: ${order.totalPrice}"
             distance.text = "${order.distance} KM"
+            image.setOnClickListener {
+                OrderDetailActivity_.intent(context).order(order).start()
+            }
         }
     }
 }

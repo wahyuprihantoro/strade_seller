@@ -1,4 +1,4 @@
-package id.strade.android.seller;
+package id.strade.android.seller.service;
 
 import android.Manifest;
 import android.app.Activity;

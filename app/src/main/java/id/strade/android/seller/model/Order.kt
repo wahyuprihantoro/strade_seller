@@ -1,14 +1,14 @@
 package id.strade.android.seller.model
 
-import android.content.ClipData.Item
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 
 /**
  * Created by wahyu on 25 November 2017.
  */
-class Order {
+class Order : Serializable {
     @SerializedName("id")
     @Expose
     var id: Int = 0
@@ -38,8 +38,8 @@ class Order {
     lateinit var buyer: User
     @SerializedName("items")
     @Expose
-    lateinit var items: List<Item>
+    lateinit var items: List<OrderItem>
     @SerializedName("distance")
     @Expose
-    var distance: Int = 0
+    var distance: Double = 0.0
 }
