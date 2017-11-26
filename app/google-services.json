@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "682308795620",
+    "firebase_url": "https://strade-id.firebaseio.com",
+    "project_id": "strade-id",
+    "storage_bucket": "strade-id.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:682308795620:android:3de76690f9f40bb0",
+        "android_client_info": {
+          "package_name": "id.strade.android.seller"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "682308795620-iel64ttjsb4nm10460k506qhuorfkcq3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1aF2RPyp0Y7DyDJOsTm9fW0v4nZ5yrZE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
