@@ -3,6 +3,7 @@ package id.strade.android.seller.network
 import id.strade.android.seller.network.service.AuthService
 import id.strade.android.seller.network.service.OrderService
 import id.strade.android.seller.network.service.ProductService
+import id.strade.android.seller.network.service.UserService
 import id.strade.android.seller.storage.Prefs
 import okhttp3.OkHttpClient
 import org.androidannotations.annotations.Bean
@@ -10,6 +11,7 @@ import org.androidannotations.annotations.EBean
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 
 /**
@@ -46,6 +48,7 @@ open class ApiClient {
             val request = requestBuilder.build()
             chain.proceed(request)
         }
+        httpClient.readTimeout(10, TimeUnit.SECONDS)
         return httpClient.build()
     }
 
@@ -54,4 +57,6 @@ open class ApiClient {
     fun getProductService(): ProductService = getService(ProductService::class.java)
 
     fun getOrderService(): OrderService = getService(OrderService::class.java)
+
+    fun getUserService() = getService(UserService::class.java)
 }

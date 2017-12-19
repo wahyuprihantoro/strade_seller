@@ -13,8 +13,13 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.gson.Gson
 import id.strade.android.seller.R
+import id.strade.android.seller.network.ApiClient
+import id.strade.android.seller.network.response.LocationResponse
 import id.strade.android.seller.service.LocationService
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.androidannotations.annotations.AfterViews
 import org.androidannotations.annotations.Bean
 import org.androidannotations.annotations.EFragment
@@ -26,6 +31,9 @@ open class MapFragment : Fragment(), OnMapReadyCallback {
 
     @Bean
     lateinit var locationService: LocationService
+
+    @Bean
+    lateinit var apiClient: ApiClient
 
     @AfterViews
     fun init() {
@@ -45,6 +53,14 @@ open class MapFragment : Fragment(), OnMapReadyCallback {
                     mMap.addMarker(MarkerOptions().position(sydney).title("Lokasi anda"))
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 14f))
                     Log.d(TAG, "on location received")
+                    apiClient.getUserService().createProducts(location.latitude, location.longitude)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({ resp: LocationResponse ->
+                                Log.d(TAG, "success update location: " + Gson().toJson(resp))
+                            }, { e: Throwable ->
+                                Log.d(TAG, "error update location: " + e.message)
+                            })
                 }
             })
             locationService.init(activity)
@@ -56,8 +72,6 @@ open class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         Log.d(TAG, "Maps is ready")
-
-
         mMap.setOnCameraIdleListener {
             Log.d(TAG, "maps idle")
             Log.d(TAG, mMap.projection.visibleRegion.farRight.toString())
