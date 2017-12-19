@@ -11,11 +11,14 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
 import id.strade.android.seller.R
+import id.strade.android.seller.model.User
 import id.strade.android.seller.network.ApiClient
+import id.strade.android.seller.network.response.ListUserResponse
 import id.strade.android.seller.network.response.LocationResponse
 import id.strade.android.seller.service.LocationService
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -35,10 +38,35 @@ open class MapFragment : Fragment(), OnMapReadyCallback {
     @Bean
     lateinit var apiClient: ApiClient
 
+    var users: List<User> = ArrayList()
+
     @AfterViews
     fun init() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        apiClient.getUserService().getUsers()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ resp: ListUserResponse ->
+                    users = resp.users
+                    Log.d(TAG, "success get users: " + Gson().toJson(resp))
+                    users.forEach {
+                        try {
+                            val lat = it.location.latitude
+                            val lng = it.location.longitude
+                            val latLng = LatLng(lat, lng)
+                            val marker = MarkerOptions().position(latLng).title(it.username)
+                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_location_buyer_orange))
+                            mMap.addMarker(marker)
+                        } catch (e: Exception) {
+                            Log.d(TAG, "error marker: " + e.message)
+                        }
+                    }
+                }, { e: Throwable ->
+                    Log.d(TAG, "error get users: " + e.message)
+                })
+
         if (ContextCompat.checkSelfPermission(activity,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -50,10 +78,24 @@ open class MapFragment : Fragment(), OnMapReadyCallback {
                 override fun onLocationChange(location: Location) {
                     val sydney = LatLng(location.latitude, location.longitude)
                     mMap.clear()
-                    mMap.addMarker(MarkerOptions().position(sydney).title("Lokasi anda"))
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 14f))
+                    users.forEach {
+                        try {
+                            val lat = it.location.latitude
+                            val lng = it.location.longitude
+                            val latLng = LatLng(lat, lng)
+                            val marker = MarkerOptions().position(latLng).title(it.username)
+                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_location_buyer_orange))
+                            mMap.addMarker(marker)
+                        } catch (e: Exception) {
+                            Log.d(TAG, "error marker: " + e.message)
+                        }
+                    }
+                    val marker = MarkerOptions().position(sydney).title("Lokasi anda")
+                    marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_location_seller_blue))
+                    mMap.addMarker(marker)
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15f))
                     Log.d(TAG, "on location received")
-                    apiClient.getUserService().createProducts(location.latitude, location.longitude)
+                    apiClient.getUserService().updateLocation(location.latitude, location.longitude)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({ resp: LocationResponse ->
