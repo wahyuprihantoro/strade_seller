@@ -31,14 +31,18 @@ open class HomeActivity : AppCompatActivity() {
         Log.d("wahyu fb", FirebaseInstanceId.getInstance().token)
     }
 
+    fun changeTitle(item: Int, title: String) {
+        supportActionBar?.title = title
+        viewPager.currentItem = item
+    }
 
     private fun setUpBottomBar() {
         bottomBar.setOnTabSelectListener { tabId ->
             when (tabId) {
-                R.id.tab_home -> viewPager.currentItem = 0
-                R.id.tab_map -> viewPager.currentItem = 1
-                R.id.tab_request -> viewPager.currentItem = 2
-                R.id.tab_account -> viewPager.currentItem = 3
+                R.id.tab_home -> changeTitle(0, "Daftar Produk")
+                R.id.tab_map -> changeTitle(1, "Maps Pelanggan")
+                R.id.tab_request -> changeTitle(2, "Daftar Pesanan")
+                R.id.tab_account -> changeTitle(3, "Setting")
             }
         }
     }

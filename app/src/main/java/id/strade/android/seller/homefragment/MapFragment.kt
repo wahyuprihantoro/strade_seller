@@ -13,15 +13,15 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import id.strade.android.seller.service.LocationService
 import id.strade.android.seller.R
+import id.strade.android.seller.service.LocationService
 import org.androidannotations.annotations.AfterViews
 import org.androidannotations.annotations.Bean
 import org.androidannotations.annotations.EFragment
 
 @EFragment(R.layout.fragment_map)
 open class MapFragment : Fragment(), OnMapReadyCallback {
-    private val TAG = MapFragment::class.java.simpleName
+    private val TAG = "wahyu " + MapFragment::class.java.simpleName
     private lateinit var mMap: GoogleMap
 
     @Bean
@@ -56,6 +56,15 @@ open class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         Log.d(TAG, "Maps is ready")
+
+
+        mMap.setOnCameraIdleListener {
+            Log.d(TAG, "maps idle")
+            Log.d(TAG, mMap.projection.visibleRegion.farRight.toString())
+            Log.d(TAG, mMap.projection.visibleRegion.nearLeft.toString())
+            val farRight = mMap.projection.visibleRegion.farRight
+            val nearLeft = mMap.projection.visibleRegion.nearLeft
+        }
     }
 
 }
