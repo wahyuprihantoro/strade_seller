@@ -17,7 +17,7 @@ interface ProductService {
 
     @FormUrlEncoded
     @POST("products")
-    fun createProducts(@Field("nameEditText") name: String,
-                       @Field("priceEditText") price: String,
-                       @Field("productImageView") image: String): Observable<BaseResponse>
+    fun createProducts(@Field("name") name: String,
+                       @Field("price") price: String,
+                       @Field("image") image: String): Observable<BaseResponse>
 }

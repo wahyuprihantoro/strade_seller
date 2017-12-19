@@ -22,6 +22,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
+                android:scaleType="centerCrop"
                 tools:src="@mipmap/ic_launcher" />
 
             <LinearLayout

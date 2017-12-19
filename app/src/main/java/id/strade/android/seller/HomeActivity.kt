@@ -5,6 +5,8 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
+import com.google.firebase.iid.FirebaseInstanceId
 import com.roughike.bottombar.BottomBar
 import id.strade.android.seller.homefragment.AccountFragment_
 import id.strade.android.seller.homefragment.HomeFragment_
@@ -26,6 +28,7 @@ open class HomeActivity : AppCompatActivity() {
     fun init() {
         viewPager.adapter = ViewPagerAdapter(supportFragmentManager)
         setUpBottomBar()
+        Log.d("wahyu fb", FirebaseInstanceId.getInstance().token)
     }
 
 

@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.MenuItem
 import android.widget.TextView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -36,6 +37,11 @@ open class OrderDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
     @AfterViews
     fun init() {
+        if (supportActionBar != null) {
+            supportActionBar!!.title = "Detail Pesanan - Rohmat Taufik"
+            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+            supportActionBar!!.setDisplayShowHomeEnabled(true)
+        }
         rvItem.layoutManager = LinearLayoutManager(this)
         rvItem.adapter = ProductAdapter(this, order.items.map { orderItem -> orderItem.product })
         locationTextView.text = order.address
@@ -44,6 +50,13 @@ open class OrderDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager.findFragmentById(R.id.maps) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onMapReady(maps: GoogleMap) {
