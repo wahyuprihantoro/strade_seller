@@ -19,7 +19,7 @@ interface AuthService {
     @FormUrlEncoded
     @POST("register")
     fun register(@Field("username") username: String,
-                 @Field("nameEditText") name: String,
+                 @Field("name") name: String,
                  @Field("phone_number") phoneNumber: String,
                  @Field("password") password: String,
                  @Field("role") role: String): Observable<UserResponse>
