@@ -13,11 +13,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import id.strade.android.seller.adapter.ProductAdapter
+import id.strade.android.seller.chat.ChatActivity_
 import id.strade.android.seller.model.Order
-import org.androidannotations.annotations.AfterViews
-import org.androidannotations.annotations.EActivity
-import org.androidannotations.annotations.Extra
-import org.androidannotations.annotations.ViewById
+import org.androidannotations.annotations.*
 
 @EActivity(R.layout.activity_order_detail)
 open class OrderDetailActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -38,7 +36,7 @@ open class OrderDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     @AfterViews
     fun init() {
         if (supportActionBar != null) {
-            supportActionBar!!.title = "Detail Pesanan - Rohmat Taufik"
+            supportActionBar!!.title = "Detail Pesanan - ${order.buyer.fullName}"
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             supportActionBar!!.setDisplayShowHomeEnabled(true)
         }
@@ -64,7 +62,12 @@ open class OrderDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         Log.d("wahyu", order.latitude.toString() + " " + order.longitude.toString())
         val latLng = LatLng(order.latitude, order.longitude)
         mMap.addMarker(MarkerOptions().position(latLng).title(MARKER_TITLE))
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11f))
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14f))
     }
 
+
+    @Click
+    fun btnChat(){
+        ChatActivity_.intent(this).order(order).start()
+    }
 }

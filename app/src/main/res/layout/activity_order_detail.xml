@@ -64,7 +64,7 @@
                     android:id="@+id/maps"
                     android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp" />
+                    android:layout_height="200dp" />
 
                 <!--<ImageView-->
                 <!--android:id="@+id/direction"-->
@@ -104,21 +104,21 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btn_take"
+            android:id="@+id/btn_chat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:background="@drawable/bg_gradient_button_blue"
-            android:text="Terima pesanan"
+            android:text="CHAT"
             android:textColor="@color/white" />
 
-        <Button
-            android:id="@+id/btn_help"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@drawable/bg_gradient_button_deep_orange"
-            android:text="Tolak"
-            android:textColor="@color/white" />
+        <!--<Button-->
+            <!--android:id="@+id/btn_help"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="8dp"-->
+            <!--android:background="@drawable/bg_gradient_button_deep_orange"-->
+            <!--android:text="Tolak"-->
+            <!--android:textColor="@color/white" />-->
     </LinearLayout>
 </ScrollView>

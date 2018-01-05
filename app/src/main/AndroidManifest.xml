@@ -45,6 +45,7 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".OrderDetailActivity_" />
+        <activity android:name=".chat.ChatActivity_" />
 
         <service android:name=".service.MyFirebaseMessagingService">
             <intent-filter>
